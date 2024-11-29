@@ -18,38 +18,26 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="users"
-    ,catalog="librarysys"
+    ,catalog="studentgradingsys"
 )
 public class Users  implements java.io.Serializable {
-
-
      private int id;
      private Role role;
      private String name;
-     private int phoneNumber;
-     private Set<Loanedbook> loanedbooks = new HashSet<Loanedbook>(0);
-
+     private String username;
+     private String password;
     public Users() {
     }
 
-	
-    public Users(int id, Role role, String name, int phoneNumber) {
+    public Users(int id, Role role, String name, String username, String password) {
         this.id = id;
         this.role = role;
         this.name = name;
-        this.phoneNumber = phoneNumber;
+        this.username = username;
+        this.password = password;
     }
-    public Users(int id, Role role, String name, int phoneNumber, Set<Loanedbook> loanedbooks) {
-       this.id = id;
-       this.role = role;
-       this.name = name;
-       this.phoneNumber = phoneNumber;
-       this.loanedbooks = loanedbooks;
-    }
-   
-     @Id 
 
-    
+    @Id
     @Column(name="id", unique=true, nullable=false)
     public int getId() {
         return this.id;
@@ -59,7 +47,7 @@ public class Users  implements java.io.Serializable {
         this.id = id;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="role_id", nullable=false)
     public Role getRole() {
         return this.role;
@@ -69,7 +57,6 @@ public class Users  implements java.io.Serializable {
         this.role = role;
     }
 
-    
     @Column(name="name", nullable=false, length=64)
     public String getName() {
         return this.name;
@@ -79,28 +66,23 @@ public class Users  implements java.io.Serializable {
         this.name = name;
     }
 
-    
-    @Column(name="phone_number", nullable=false)
-    public int getPhoneNumber() {
-        return this.phoneNumber;
-    }
-    
-    public void setPhoneNumber(int phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    @Column(name="username", nullable=false)
+    public String getUsername() {
+        return username;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="users")
-    public Set<Loanedbook> getLoanedbooks() {
-        return this.loanedbooks;
-    }
-    
-    public void setLoanedbooks(Set<Loanedbook> loanedbooks) {
-        this.loanedbooks = loanedbooks;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
+    @Column(name = "password", nullable = false)
+    public String getPassword() {
+        return password;
+    }
 
-
-
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
 
 
