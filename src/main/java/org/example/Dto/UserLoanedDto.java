@@ -3,10 +3,7 @@ package org.example.Dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.cassiomolin.user.domain.User;
-import org.example.model.Book;
-
-import org.example.model.Users;
+//import org.example.cassiomolin.user.domain.User;
 
 import java.util.Date;
 import java.util.List;

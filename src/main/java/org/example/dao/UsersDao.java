@@ -35,10 +35,22 @@ public class UsersDao {
 		return em.merge(entity);
 	}
 
+//	public List<Users> listAll(Integer startPosition, Integer maxResult) {
+//		TypedQuery<Users> findAllQuery = em.createQuery(
+//				"SELECT DISTINCT u FROM Users u LEFT JOIN FETCH u.role LEFT JOIN FETCH u.loanedbooks ORDER BY u.id",
+//				Users.class);
+//		if (startPosition != null) {
+//			findAllQuery.setFirstResult(startPosition);
+//		}
+//		if (maxResult != null) {
+//			findAllQuery.setMaxResults(maxResult);
+//		}
+//		return findAllQuery.getResultList();
+//	}
+
 	public List<Users> listAll(Integer startPosition, Integer maxResult) {
 		TypedQuery<Users> findAllQuery = em.createQuery(
-				"SELECT DISTINCT u FROM Users u LEFT JOIN FETCH u.role LEFT JOIN FETCH u.loanedbooks ORDER BY u.id",
-				Users.class);
+				"SELECT DISTINCT u FROM Users u ORDER BY u.id", Users.class);
 		if (startPosition != null) {
 			findAllQuery.setFirstResult(startPosition);
 		}
