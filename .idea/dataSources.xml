@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:mysql://localhost:3306/librarysys</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="studentgradingsys@localhost" uuid="183163a5-e5b1-4abe-b86b-ed345a27f8e4">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:3306/studentgradingsys</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
