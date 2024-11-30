@@ -2,6 +2,7 @@ package org.example.rest;
 
 import io.swagger.annotations.Api;
 import org.example.Dto.*;
+import org.example.model.Users;
 import org.example.service.AdminService;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -34,6 +35,7 @@ public class AdminEndpoint {
                     .build();
         }
     }
+
 
 
 }
