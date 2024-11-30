@@ -1,13 +1,17 @@
+org\example\dao\RoleDao.class
 org\example\Dto\res\StatusDto.class
 org\example\Dto\UserLoanedDto.class
+org\example\dao\UserDao.class
 org\example\Dto\LoginDto.class
 org\example\model\Role.class
 org\example\Dto\req\UserReq.class
 org\example\service\AdminService.class
+org\example\Dto\req\RegistrationResponseDto.class
 org\example\rest\AdminEndpoint.class
 org\example\model\Users.class
 org\example\Dto\req\Bookreq.class
 org\example\dao\UsersDao.class
 org\example\rest\RestApplication.class
+org\example\Dto\req\RegistrationRequestDto.class
 org\example\Dto\res\BookRes.class
 org\example\Dto\userDto.class
