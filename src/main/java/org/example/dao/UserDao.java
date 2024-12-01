@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,11 +19,10 @@ import java.util.Optional;
 public class UserDao {
     @PersistenceContext(unitName = "Librarysys-persistence-unit")
     private EntityManager em;
-
-    public void create(Users entity) {
-
+    public int create(Users entity) {
         em.persist(entity);
         em.flush();
+        return entity.getId(); // Assuming the ID field in `Users` is named `id`
     }
 
     public void deleteById(int id) {
@@ -31,6 +31,25 @@ public class UserDao {
             em.remove(entity);
         }
     }
+
+
+        public List<Users> listAllUsersByRole(int roleId, int start, int max) {
+            // Create a typed query to select users by role with pagination
+            TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u WHERE u.role.id = :roleId", Users.class);
+            query.setParameter("roleId", roleId);
+            query.setFirstResult(start);
+            query.setMaxResults(max);
+            return query.getResultList();
+        }
+
+
+
+
+
+
+
+
+
 
     public Users findById(int id)
     {

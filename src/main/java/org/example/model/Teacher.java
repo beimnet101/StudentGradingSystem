@@ -22,6 +22,7 @@ public class Teacher implements Serializable {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "teacher_id", unique = true, nullable = false)
     public int getTeacherId() {
         return teacherId;

@@ -24,6 +24,7 @@ public class Student implements Serializable {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "student_id", unique = true, nullable = false)
     public int getStudentId() {
         return studentId;
