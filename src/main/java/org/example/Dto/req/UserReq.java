@@ -10,6 +10,20 @@ import org.example.model.Role;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserReq {
+    private String name;
+    private String username;
+    private String password;
+    private Integer roleId;
+    private String class_level;
+
+    public String getClass_level() {
+        return class_level;
+    }
+
+    public void setClass_level(String class_level) {
+        this.class_level = class_level;
+    }
+
     public String getName() {
         return name;
     }
@@ -42,10 +56,5 @@ public class UserReq {
     public void setRoleId(Integer roleId) {
         this.roleId = roleId;
     }
-
-    private String name;
-    private String username;
-    private String password;
-    private Integer roleId;
 
 }

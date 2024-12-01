@@ -10,32 +10,17 @@ import java.io.Serializable;
 @Table(name = "subjects", catalog = "studentgradingsys")
 public class Subject implements Serializable {
 
-    private int subjectId;
-    private String subjectName;
-    private String subjectCode;
-    private Teacher teacher; // Reference to the Teacher table
-
-    public Subject() {
-    }
-
-    public Subject(int subjectId, String subjectName, String subjectCode, Teacher teacher) {
-        this.subjectId = subjectId;
-        this.subjectName = subjectName;
-        this.subjectCode = subjectCode;
-        this.teacher = teacher;
-    }
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "subject_id", unique = true, nullable = false)
-    public int getSubjectId() {
-        return subjectId;
-    }
+    private int subjectId;
 
-    public void setSubjectId(int subjectId) {
-        this.subjectId = subjectId;
-    }
+    @Column(name = "subject_code", nullable = false, unique = true)
+    private String subjectCode;
 
-    @Column(name = "subject_name", nullable = false, length = 100)
+    @Column(name = "subject_name", nullable = false)
+    private String subjectName;
+
     public String getSubjectName() {
         return subjectName;
     }
@@ -44,7 +29,19 @@ public class Subject implements Serializable {
         this.subjectName = subjectName;
     }
 
-    @Column(name = "subject_code", nullable = false, length = 20)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "teacher_id", nullable = false)
+    private Teacher teacher;
+
+    // Getters and Setters
+    public int getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(int subjectId) {
+        this.subjectId = subjectId;
+    }
+
     public String getSubjectCode() {
         return subjectCode;
     }
@@ -53,10 +50,8 @@ public class Subject implements Serializable {
         this.subjectCode = subjectCode;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "teacher_id", nullable = false)
-    public Teacher getTeacher() {
-        return teacher;
+
+    public Teacher getTeacher() {return teacher;
     }
 
     public void setTeacher(Teacher teacher) {
