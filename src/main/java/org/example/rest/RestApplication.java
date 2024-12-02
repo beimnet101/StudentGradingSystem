@@ -9,8 +9,8 @@ import javax.ws.rs.core.Application;
 
 @ApplicationPath("/rest")
 @SwaggerDefinition(info = @Info(
-        title = "axis",
-        description = "axis System",
+        title = "Student Grading System",
+        description = "Student Grading System",
         version = "1.0.0",
         contact = @Contact(
                 name = "ATLAS COMPUTER TECHNOLOGY PLC",
