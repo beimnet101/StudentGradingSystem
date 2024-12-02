@@ -21,6 +21,16 @@ public class Subject implements Serializable {
     @Column(name = "subject_name", nullable = false)
     private String subjectName;
 
+    public int getCredithour() {
+        return credithour;
+    }
+
+    public void setCredithour(int credithour) {
+        this.credithour = credithour;
+    }
+
+    @Column(name = "credithour", nullable = false)
+    private int credithour;
     public String getSubjectName() {
         return subjectName;
     }
@@ -37,6 +47,8 @@ public class Subject implements Serializable {
     public int getSubjectId() {
         return subjectId;
     }
+
+
 
     public void setSubjectId(int subjectId) {
         this.subjectId = subjectId;

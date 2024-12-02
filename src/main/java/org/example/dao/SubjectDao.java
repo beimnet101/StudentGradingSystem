@@ -4,6 +4,7 @@ import org.example.model.Subject;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
@@ -32,6 +33,25 @@ public class SubjectDao {
         query.setParameter("subjectCode", subjectCode);
         return query.getSingleResult();
     }
+
+
+    public int findCreditHoursBySubjectId(int subjectId) {
+        TypedQuery<Integer> query = em.createQuery(
+                "SELECT s.credithour FROM Subject s WHERE s.id = :subjectId", Integer.class
+        );
+        query.setParameter("subjectId", subjectId);
+
+        try {
+            Integer result = query.getSingleResult();
+            return result != null ? result : 0; // Return 0 if the result is null
+        } catch (NoResultException e) {
+            throw new IllegalArgumentException("Subject not found with ID: " + subjectId);
+        }
+    }
+
+
+
+
 
     public List<Subject> listAll(int start, int max) {
             TypedQuery<Subject> query = em.createQuery("SELECT s FROM Subject s", Subject.class);

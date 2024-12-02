@@ -14,20 +14,26 @@ public class Grade implements Serializable {
     private int gradeId;
     private Subject subject; // Reference to the Subject table
     private Student student; // Reference to the Student table
-    private double gradeValue;
+    private String gradeValue; // Letter grade (e.g., A, B, C)
     private String remark;
     private Date dateAssigned;
+    private  double assessmentScore;
+    private  double finalExamScore;
+    private  double TotalScore;
+
 
     public Grade() {
     }
 
-    public Grade(int gradeId, Subject subject, Student student, double gradeValue, String remark, Date dateAssigned) {
+    public Grade(int gradeId, Subject subject, Student student, String gradeValue, String remark, Date dateAssigned,double assessmentScore,double finalExamScore) {
         this.gradeId = gradeId;
         this.subject = subject;
         this.student = student;
         this.gradeValue = gradeValue;
         this.remark = remark;
         this.dateAssigned = dateAssigned;
+        this.assessmentScore=assessmentScore;
+        this.finalExamScore=finalExamScore;
     }
 
     @Id
@@ -62,11 +68,11 @@ public class Grade implements Serializable {
     }
 
     @Column(name = "grade_value", nullable = false)
-    public double getGradeValue() {
+    public String getGradeValue() {
         return gradeValue;
     }
 
-    public void setGradeValue(double gradeValue) {
+    public void setGradeValue(String gradeValue) {
         this.gradeValue = gradeValue;
     }
 
@@ -87,5 +93,32 @@ public class Grade implements Serializable {
 
     public void setDateAssigned(Date dateAssigned) {
         this.dateAssigned = dateAssigned;
+    }
+    @Column(name = "assessment_score", nullable = false)
+    public double getAssessmentScore() {
+        return assessmentScore;
+    }
+
+    public void setAssessmentScore(double assessmentScore) {
+        this.assessmentScore = assessmentScore;
+    }
+
+    @Column(name = "final_exam_score", nullable = false)
+    public double getFinalExamScore() {
+        return finalExamScore;
+    }
+
+    public void setFinalExamScore(double finalExamScore) {
+        this.finalExamScore = finalExamScore;
+    }
+
+
+    @Column(name = "total_score", nullable = false)
+    public double getTotalScore() {
+        return TotalScore;
+    }
+
+    public void setTotalScore(double totalScore) {
+        TotalScore = totalScore;
     }
 }
