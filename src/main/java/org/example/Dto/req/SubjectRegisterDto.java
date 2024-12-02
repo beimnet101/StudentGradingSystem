@@ -7,6 +7,16 @@ public class SubjectRegisterDto {
     private String name;
 
     private  int teacherId;
+    private  int credithour;
+
+    public int getCredithour() {
+        return credithour;
+    }
+
+    public void setCredithour(int credithour) {
+        this.credithour = credithour;
+    }
+
     public int getTeacherId() {
         return teacherId;
     }

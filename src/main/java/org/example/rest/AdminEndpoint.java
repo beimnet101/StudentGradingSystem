@@ -62,6 +62,24 @@ public class AdminEndpoint {
         }
     }
 
+
+    @POST
+    @Path("/assignTeacherForaSubject")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public  Response assignTeacher(AssignNewTeacherDto assignNewTeacherDto){
+        try{
+
+            RegistrationResponseDto reponse =adminService.assignSubjectTeacher(assignNewTeacherDto);
+            return Response.ok(reponse).build();
+        } catch (Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR) .entity("Failed to assign new teacher: " + e.getMessage()) .build();
+        }
+    }
+
+
+
+
     @PUT
     @Path("/assignNewTeacherForaSubject")
     @Consumes(MediaType.APPLICATION_JSON)
