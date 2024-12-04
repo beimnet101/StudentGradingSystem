@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @Path("/student")
-@Api(value = "Library System")
+@Api(value = "Student services")
 public class StudentEndpoint {
 @EJB
 GpaService gpaService;

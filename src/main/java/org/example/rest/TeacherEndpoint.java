@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/teacher")
-@Api(value = "Library System")
+@Api(value = "teacher services")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class TeacherEndpoint {
