@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.Dto.SubjectDto;
+import org.example.Dto.req.AssignNewTeacherDto;
 import org.example.Dto.req.RegistrationResponseDto;
 import org.example.Dto.req.SubjectRegisterDto;
 import org.example.Dto.req.UserReq;
@@ -174,6 +175,7 @@ public class AdminService {
         Subject subjectModel = new Subject();
         subjectModel.setSubjectName(subjectRegisterDto.getName());
         subjectModel.setSubjectCode(subjectRegisterDto.getSubjectCode());
+        subjectModel.setCredithour(subjectRegisterDto.getCredithour());
         Teacher teacher= teacherDao.findById(subjectRegisterDto.getTeacherId());
         subjectModel.setTeacher(teacher);
         try {
@@ -193,6 +195,35 @@ public class AdminService {
 
         return new RegistrationResponseDto(true,"Subject created") ;
 
+    }
+
+
+    @Transactional
+    public RegistrationResponseDto assignSubjectTeacher(AssignNewTeacherDto assignNewTeacherDto) {
+        try {
+            // Find the subject by subjectCode
+            Subject subject = subjectDao.findBySubjectCode(assignNewTeacherDto.getSubjectCode());
+            if (subject == null) {
+                return new RegistrationResponseDto(false, "Subject not found");
+            }
+
+            // Find the new teacher by teacherId
+            Teacher teacher = teacherDao.findById(assignNewTeacherDto.getTeacherId());
+            if (teacher == null) {
+                return new RegistrationResponseDto(false, "Teacher not found");
+            }
+
+            // Assign the new teacher to the subject
+            subject.setTeacher(teacher);
+
+            // Update the subject in the database
+            subjectDao.update(subject);
+            em.flush(); // Ensure changes are persisted
+
+            return new RegistrationResponseDto(true, "Subject teacher updated successfully");
+        } catch (Exception e) {
+            return new RegistrationResponseDto(false, "Error updating subject teacher: " + e.getMessage());
+        }
     }
     @Transactional
         public RegistrationResponseDto updateSubjectTeacher(String subjectCode, int newTeacherId) {

@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/admin")
-@Api(value = "Student Grading System")
+@Api(value = "admin services")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class AdminEndpoint {
@@ -29,8 +29,7 @@ public class AdminEndpoint {
     @Path("/Allusers")
     @ApiOperation(value = "Get All Users",
             notes = "Fetches all users from the system, with pagination support.",
-            response = userDto.class,
-            tags = {"User Management"})
+            response = userDto.class)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllUsers(@QueryParam("start") @DefaultValue("0") int start,
                                 @QueryParam("max") @DefaultValue("10") int max) {
@@ -52,8 +51,7 @@ public class AdminEndpoint {
     @Path("/AllRegisteredSubjects")
     @ApiOperation(value = "Get All Registered Subjects",
             notes = "Fetches all registered subjects from the system, with pagination support.",
-            response = SubjectDto.class,
-            tags = {"Subject Management"})
+            response = SubjectDto.class)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllRegistered(@QueryParam("start") @DefaultValue("0") int start,
                                      @QueryParam("max") @DefaultValue("10") int max) {
@@ -71,12 +69,29 @@ public class AdminEndpoint {
         }
     }
 
+
+    @POST
+    @Path("/assignTeacherForaSubject")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public  Response assignTeacher(AssignNewTeacherDto assignNewTeacherDto){
+        try{
+
+            RegistrationResponseDto reponse =adminService.assignSubjectTeacher(assignNewTeacherDto);
+            return Response.ok(reponse).build();
+        } catch (Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR) .entity("Failed to assign new teacher: " + e.getMessage()) .build();
+        }
+    }
+
+
+
+
     @PUT
     @Path("/assignNewTeacherForaSubject")
     @ApiOperation(value = "Assign a New Teacher to a Subject",
             notes = "Assigns a new teacher to a subject based on the subject code and teacher ID.",
-            response = RegistrationResponseDto.class,
-            tags = {"Teacher Management"})
+            response = RegistrationResponseDto.class)
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response assignNewTeacher(AssignNewTeacherDto assignNewTeacherDto) {
@@ -96,8 +111,7 @@ public class AdminEndpoint {
     @Path("/byRole")
     @ApiOperation(value = "Get Users by Role",
             notes = "Fetches users based on the specified role ID, with pagination support.",
-            response = userDto.class,
-            tags = {"User Management"})
+            response = userDto.class)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUsersByRole(@QueryParam("roleId") int roleId,
                                    @QueryParam("start") @DefaultValue("0") int start,
@@ -120,8 +134,7 @@ public class AdminEndpoint {
     @Path("/addUser")
     @ApiOperation(value = "Add a New User",
             notes = "Adds a new user to the system with the provided user details.",
-            response = RegistrationResponseDto.class,
-            tags = {"User Management"})
+            response = RegistrationResponseDto.class)
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createUser(UserReq userReq) {
@@ -146,8 +159,7 @@ public class AdminEndpoint {
     @Path("/addSubject")
     @ApiOperation(value = "Add a New Subject",
             notes = "Adds a new subject to the system with the provided subject details.",
-            response = RegistrationResponseDto.class,
-            tags = {"Subject Management"})
+            response = RegistrationResponseDto.class)
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addSubject(SubjectRegisterDto subjectRegisterDto) {
