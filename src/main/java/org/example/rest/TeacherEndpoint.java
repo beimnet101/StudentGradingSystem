@@ -1,11 +1,17 @@
 package org.example.rest;
 import io.swagger.annotations.Api;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.example.Dto.req.*;
 
+import org.example.Dto.userDto;
+import org.example.security.keycloack.AuthenticationService;
 import org.example.service.TeacherService;
 
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -18,13 +24,35 @@ import java.util.List;
 public class TeacherEndpoint {
     @EJB
     TeacherService TeacherService;
+    @Inject
+    AuthenticationService authenticationService;
 
     @POST
     @Path("/PostStudentGrade")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Bearer <your-token>", required = true, dataType = "string", paramType = "header")
+    })
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public  Response PostGrade(GiveGradeDto giveGradeDto){
+    public  Response PostGrade(@HeaderParam("authorization") String authorizationHeader,GiveGradeDto giveGradeDto){
         try{
+            if (authorizationHeader == null || authorizationHeader.trim().isEmpty()) {
+                return Response.status(Response.Status.UNAUTHORIZED)
+                        .entity("Authorization header is missing or invalid").build();
+            }
+
+            String token = authorizationHeader;
+
+            // Check authentication
+            boolean authenticated = authenticationService.authenticateService(token, "teacher");
+            if (!authenticated) {
+                return Response.status(Response.Status.FORBIDDEN)
+                        .entity("Forbidden: You do not have the required permissions.").build();
+            }
+
+
+
+
 
             RegistrationResponseDto reponse = TeacherService.gradeYourSubject(giveGradeDto);
             return Response.ok(reponse).build();
@@ -35,10 +63,28 @@ public class TeacherEndpoint {
 
     @POST
     @Path("/addSubject")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Bearer <your-token>", required = true, dataType = "string", paramType = "header")
+    })
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addSubject(SubjectRegisterDto subjectRegisterDto) {
+    public Response addSubject(@HeaderParam("authorization") String authorizationHeader,SubjectRegisterDto subjectRegisterDto) {
         try {
+
+            if (authorizationHeader == null || authorizationHeader.trim().isEmpty()) {
+                return Response.status(Response.Status.UNAUTHORIZED)
+                        .entity("Authorization header is missing or invalid").build();
+            }
+
+            String token = authorizationHeader;
+
+            // Check authentication
+            boolean authenticated = authenticationService.authenticateService(token, "teacher");
+            if (!authenticated) {
+                return Response.status(Response.Status.FORBIDDEN)
+                        .entity("Forbidden: You do not have the required permissions.").build();
+            }
+
             // Call the AdminService to add the user
             RegistrationResponseDto response = TeacherService.addSubject(subjectRegisterDto);
 

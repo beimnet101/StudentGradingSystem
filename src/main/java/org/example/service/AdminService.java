@@ -8,9 +8,12 @@ import org.example.Dto.req.UserReq;
 import org.example.Dto.userDto;
 import org.example.dao.*;
 import org.example.model.*;
+import org.example.security.keycloack.Authenticate;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
@@ -35,6 +38,10 @@ public class AdminService {
 
     @EJB
     TeacherDao teacherDao;
+
+
+    @Inject
+    Authenticate authenticate;
     private EntityManager entityManager;
 
     public List<userDto> Users(int start, int max) {
@@ -108,7 +115,9 @@ public class AdminService {
 
         return dto;
 
+
     }
+
     @Transactional
     public RegistrationResponseDto addUser(UserReq userReq) {
         // Create and populate userModel with data from userReq
@@ -116,6 +125,10 @@ public class AdminService {
         userModel.setUsername(userReq.getUsername());
         userModel.setName(userReq.getName());
         userModel.setPassword(userReq.getPassword()); // Make sure to hash the password
+
+        String username = userReq.getUsername();
+        String password = userReq.getPassword();
+        String name = userReq.getName();
 
         // Find the role
         Role role = roleDao.findById(userReq.getRoleId());
@@ -125,6 +138,28 @@ public class AdminService {
         userModel.setRole(role);
 
         try {
+            // Create user in Keycloak with the username and password
+            boolean keycloakSuccess = authenticate.createUser(username,password,name);
+            if (!keycloakSuccess) {
+                return new RegistrationResponseDto(false, "Failed to register user in Keycloak");
+            }
+
+            // After creating the user in Keycloak, assign the role to the user in Keycloak
+            String keycloakRole = "";
+            if (userReq.getRoleId() == 1) {
+                keycloakRole = "admin";
+            } else if (userReq.getRoleId() == 2) {
+                keycloakRole = "teacher";
+            } else if (userReq.getRoleId() == 3) {
+                keycloakRole = "student";
+            }
+
+            // Assign the appropriate role to the user in Keycloak
+            boolean roleAssigned = authenticate.assignRoleToUser(username, keycloakRole);
+            if (!roleAssigned) {
+                return new RegistrationResponseDto(false, "Failed to assign role to user in Keycloak");
+            }
+
             // Persist the user model and flush to get the ID
             int userId = userDao.create(userModel);
             em.flush(); // Ensure the user is persisted and the ID is generated
@@ -134,41 +169,35 @@ public class AdminService {
                 return new RegistrationResponseDto(false, "User ID not generated");
             }
 
+            // Create associated Student or Teacher based on the role
+            if (role.getId() == 3) { // Assuming roleId for student is 3
+                // Create student
+                Student student = new Student();
+                student.setUser(userModel); // Associate the user
+                student.setClassLevel(userReq.getClass_level()); // Set class level for the student
 
-            // Now create the Student if the role is student
-               if (role.getId() == 3) { // Assuming roleId for student is 3
-                     // Create student
-                       Student student = new Student();
-                       student.setUser(userModel); // Associate the user
-                       student.setClassLevel(userReq.getClass_level()); // Set class level for the student
-
-                     // Create student in the database
-                       studentDao.create(student);
-                       em.flush(); // Ensure the student is persisted
-                }
-//
-             if (role.getId() == 2) { // Assuming roleId for Teacher id 3
-                // Create teacher
-                Teacher teacher = new Teacher();
-                teacher.setUser(userModel); // Associate the user
-                // Set class level for the student
-
-                // Create teacher in the database
-                teacherDao.create(teacher);
+                // Create student in the database
+                studentDao.create(student);
                 em.flush(); // Ensure the student is persisted
             }
 
+            if (role.getId() == 2) { // Assuming roleId for Teacher is 2
+                // Create teacher
+                Teacher teacher = new Teacher();
+                teacher.setUser(userModel); // Associate the user
 
-//                // Return success response
-//                return new RegistrationResponseDto(true, "User created successfully")
+                // Create teacher in the database
+                teacherDao.create(teacher);
+                em.flush(); // Ensure the teacher is persisted
+            }
+
+            return new RegistrationResponseDto(true, "User created successfully");
 
         } catch (Exception e) {
             return new RegistrationResponseDto(false, "Error creating user and student: " + e.getMessage());
-
         }
-        return new RegistrationResponseDto(true,"user created") ;
-
     }
+
     @Transactional
     public RegistrationResponseDto addSubject(SubjectRegisterDto subjectRegisterDto) {
         // Create and populate userModel with data from userReq
