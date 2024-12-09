@@ -1,13 +1,14 @@
-package org.example.Dto;
+package org.example.Dto.req;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class LoginDto {
-    private String username;
-    private String password;
+public class RegistrationResponseDto {
+    private boolean status;
+    private String msg;
+
 }
