@@ -3,6 +3,7 @@ C:\Users\HP\Documents\GitHub\StudentGradingSystem\src\main\java\org\example\mode
 C:\Users\HP\Documents\GitHub\StudentGradingSystem\src\main\java\org\example\utility\NumericGrToLetterGrade.java
 C:\Users\HP\Documents\GitHub\StudentGradingSystem\src\main\java\org\example\Dto\req\UserLoginRequest.java
 C:\Users\HP\Documents\GitHub\StudentGradingSystem\src\main\java\org\example\dao\RoleDao.java
+C:\Users\HP\Documents\GitHub\StudentGradingSystem\src\main\java\org\example\Dto\res\AuthorizationResponse.java
 C:\Users\HP\Documents\GitHub\StudentGradingSystem\src\main\java\org\example\dao\UsersDao.java
 C:\Users\HP\Documents\GitHub\StudentGradingSystem\src\main\java\org\example\dao\GradeDao.java
 C:\Users\HP\Documents\GitHub\StudentGradingSystem\src\main\java\org\example\security\keycloack\AuthenticationService.java

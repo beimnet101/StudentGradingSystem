@@ -7,6 +7,7 @@ import org.example.Dto.req.RegistrationResponseDto;
 import org.example.Dto.req.SubjectRegisterDto;
 import org.example.Dto.req.UserReq;
 
+import org.example.Dto.res.AuthorizationResponse;
 import org.example.security.keycloack.Authenticate;
 import org.example.security.keycloack.AuthenticationService;
 import org.example.service.AdminService;
@@ -30,6 +31,8 @@ public class AdminEndpoint {
     Authenticate authenticate;
     @Inject
     AuthenticationService authenticationService;
+    AuthorizationResponse authorizationResponse=new AuthorizationResponse();
+
 
     @GET
     @Path("/Allusers")
@@ -87,6 +90,9 @@ public class AdminEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response assignTeacher(@HeaderParam("authorization") String authorizationHeader,AssignNewTeacherDto assignNewTeacherDto) {
+
+
+
         try {
             if (authorizationHeader == null || authorizationHeader.trim().isEmpty()) {
                 return Response.status(Response.Status.UNAUTHORIZED)
@@ -98,8 +104,9 @@ public class AdminEndpoint {
             // Check authentication
             boolean authenticated = authenticationService.authenticateService(token, "admin");
             if (!authenticated) {
+                 authorizationResponse.setMsg("not authorized");
                 return Response.status(Response.Status.FORBIDDEN)
-                        .entity("Forbidden: You do not have the required permissions.").build();
+                        .entity(authorizationResponse).build();
             }
 
 
@@ -135,8 +142,9 @@ public class AdminEndpoint {
             // Check authentication
             boolean authenticated = authenticationService.authenticateService(token, "admin");
             if (!authenticated) {
+                authorizationResponse.setMsg("not authorized");
                 return Response.status(Response.Status.FORBIDDEN)
-                        .entity("Forbidden: You do not have the required permissions.").build();
+                        .entity( authorizationResponse).build();
             }
 
             String subjectCode = assignNewTeacherDto.getSubjectCode();
@@ -198,8 +206,9 @@ public class AdminEndpoint {
         try {
             // Check if the authorization header is missing or empty
             if (authorizationHeader == null || authorizationHeader.trim().isEmpty()) {
-                return Response.status(Response.Status.UNAUTHORIZED)
-                        .entity("Authorization header is missing or invalid").build();
+                authorizationResponse.setMsg("not authorized");
+                return Response.status(Response.Status.FORBIDDEN)
+                        .entity( authorizationResponse).build();
             }
 
             String token = authorizationHeader;
@@ -252,8 +261,9 @@ public class AdminEndpoint {
             // Check authentication
             boolean authenticated = authenticationService.authenticateService(token, "admin");
             if (!authenticated) {
+                authorizationResponse.setMsg("not authorized");
                 return Response.status(Response.Status.FORBIDDEN)
-                        .entity("Forbidden: You do not have the required permissions.").build();
+                        .entity( authorizationResponse).build();
             }
             // Call the AdminService to add the subject
             RegistrationResponseDto response = adminService.addSubject(subjectRegisterDto);

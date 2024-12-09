@@ -26,7 +26,13 @@ public class LoginResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Authenticate user and return access token", notes = "This endpoint accepts the username and password, authenticates the user via Keycloak, and returns an access token if valid.")
+    @ApiOperation(value = "Authenticate user and return access token", notes = "This endpoint accepts the username and password, " +
+            "authenticates the user via Keycloak, and returns an access token if valid.",
+    response=LoginResponseDto.class)
+
+
+
+
     public Response login(UserLoginRequest loginRequest) {
         try {
             // Extract credentials from the login request
@@ -41,8 +47,12 @@ public class LoginResource {
                 return Response.ok(new LoginResponseDto(token)).build();
             } else {
                 // Unauthorized if authentication fails
-                return Response.status(Response.Status.UNAUTHORIZED)
-                        .entity("Invalid username or password").build();
+                LoginResponseDto loginResponseDto=new LoginResponseDto();
+                loginResponseDto.setMsg("incorrect password or username");
+
+                return Response.status(Response.Status.UNAUTHORIZED).
+                        entity(loginResponseDto).build();
+
             }
 
         } catch (Exception e) {

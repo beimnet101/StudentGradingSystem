@@ -1,11 +1,9 @@
 package org.example.rest;
-import io.swagger.annotations.Api;
+import io.swagger.annotations.*;
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 import org.example.Dto.req.*;
 
+import org.example.Dto.res.AuthorizationResponse;
 import org.example.Dto.userDto;
 import org.example.security.keycloack.AuthenticationService;
 import org.example.service.TeacherService;
@@ -26,12 +24,19 @@ public class TeacherEndpoint {
     TeacherService TeacherService;
     @Inject
     AuthenticationService authenticationService;
+    AuthorizationResponse authorizationResponse=new AuthorizationResponse();
 
     @POST
     @Path("/PostStudentGrade")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "Bearer <your-token>", required = true, dataType = "string", paramType = "header")
     })
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Invalid ID supplied",
+                    responseHeaders = @ResponseHeader(name = "X-Rack-Cache", description = "Explains whether or not a cache was used", response = Boolean.class)),
+            @ApiResponse(code = 404, message = "Pet not found") })
+
+
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public  Response PostGrade(@HeaderParam("authorization") String authorizationHeader,GiveGradeDto giveGradeDto){
@@ -46,13 +51,10 @@ public class TeacherEndpoint {
             // Check authentication
             boolean authenticated = authenticationService.authenticateService(token, "teacher");
             if (!authenticated) {
+                authorizationResponse.setMsg("not authorized");
                 return Response.status(Response.Status.FORBIDDEN)
-                        .entity("Forbidden: You do not have the required permissions.").build();
+                        .entity(authorizationResponse).build();
             }
-
-
-
-
 
             RegistrationResponseDto reponse = TeacherService.gradeYourSubject(giveGradeDto);
             return Response.ok(reponse).build();
@@ -81,10 +83,10 @@ public class TeacherEndpoint {
             // Check authentication
             boolean authenticated = authenticationService.authenticateService(token, "teacher");
             if (!authenticated) {
+                authorizationResponse.setMsg("not authorized");
                 return Response.status(Response.Status.FORBIDDEN)
-                        .entity("Forbidden: You do not have the required permissions.").build();
+                        .entity(authorizationResponse).build();
             }
-
             // Call the AdminService to add the user
             RegistrationResponseDto response = TeacherService.addSubject(subjectRegisterDto);
 

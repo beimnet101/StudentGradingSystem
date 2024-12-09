@@ -11,6 +11,7 @@ org\example\Dto\req\RegistrationResponseDto.class
 org\example\Dto\req\Bookreq.class
 org\example\Dto\res\GradeReportDto.class
 org\example\dao\GradeDao.class
+org\example\Dto\res\AuthorizationResponse.class
 org\example\utility\NumericGrToLetterGrade.class
 org\example\config\Configuration.class
 org\example\Dto\SubjectDto.class

@@ -28,6 +28,7 @@ import javax.ws.rs.core.Application;
                                 name = "Authorization",  // The header field name
                                 key = "Bearer Token",
                                 in = ApiKeyAuthDefinition.ApiKeyLocation.HEADER // Indicates the token will be sent in the header
+                                 
                         )
                 }
         )

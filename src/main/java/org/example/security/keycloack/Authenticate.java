@@ -91,7 +91,8 @@ public class Authenticate {
 	public boolean assignRoleToUser(String username, String roleName) {
 		try {
 			// Search for the user in Keycloak by username
-			UserRepresentation user = keycloak.realm(StudentGradingRealm).users().search(username).stream()
+			UserRepresentation user = keycloak.realm(StudentGradingRealm).users()
+					.search(username).stream()
 					.findFirst()
 					.orElseThrow(() -> new RuntimeException("User not found in Keycloak"));
 
