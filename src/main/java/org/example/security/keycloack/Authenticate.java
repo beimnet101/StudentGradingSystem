@@ -74,6 +74,9 @@ public class Authenticate {
 			passwordCred.setValue(password);
 			passwordCred.setTemporary(false);
 			userRep.setCredentials(Arrays.asList(passwordCred));
+			userRep.setEmail("default@gmail.com");
+
+			userRep.setLastName("lastname");
 			try {
 				Response response = keycloak.realm(StudentGradingRealm).users().create(userRep);
 
